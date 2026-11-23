@@ -2,7 +2,7 @@
 
 ## 功能简介
 
-本站的 Go 服务提供 REST API，并通过维护 CLI 管理数据库和站主账号。P1 已实现公开站点配置读取，以及站主登录、会话查询和退出，已通过本地 HTTPS 和浏览器联调。内容发布、Git 同步和访客评论仍在开发计划中。
+Go API 为公开站提供站点配置，为管理端提供站主登录、会话查询和退出。这些接口已通过本地 HTTPS 和浏览器联调。维护 CLI 用于迁移数据库、初始化站主账号和重置密码。
 
 ## 技术栈
 
@@ -52,5 +52,5 @@ sh scripts/build.sh
 | --- | --- |
 | 修改登录、查询会话或退出流程 | [站主登录与会话开发须知](../docs/development/owner-session.md) |
 | 核对接口、事务与数据库约束 | [OpenAPI](../contracts/openapi.yaml)、[数据库设计](../docs/design/database-design.md) |
-| 配置本地 HTTPS 或复现验收 | [本地开发说明](../docs/development/p1-local.md)、[联调规范](../docs/local-integration.md)、[验收记录](../docs/verification/tools-2026-11-23.md) |
+| 配置本地 HTTPS 或复现验收 | [本地开发说明](../docs/development/local-development.md)、[联调规范](../docs/local-integration.md)、[验收记录](../docs/verification/tools-2026-11-23.md) |
 | 查看代码与协作要求 | [后端规范](AGENTS.md)、[根编码规范](../CONTRIBUTING.md) |
