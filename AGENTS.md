@@ -10,4 +10,5 @@
 - 不记录密码、会话、CSRF、邮箱、正文或仓库凭据；响应不暴露原始 SQL、路径和堆栈。认证和公开/私密隔离由后端校验，不能依赖界面隐藏。
 - 单元测试就近放 `*_test.go`，数据库使用独立临时文件；跨进程 HTTPS 和浏览器测试由根仓库编排。不得抢占端口或停止其他任务服务。
 - 使用 `sh scripts/check.sh`、`sh scripts/test.sh`、`sh scripts/build.sh`。三个入口均校验精确 Go 版本并禁用自动下载工具链；后端构建无需 Node、pnpm 或前端源码。
+- 参考 [Go 代码评审指南](https://go.dev/wiki/CodeReviewComments)和 [Go 事务指南](https://go.dev/doc/database/execute-transactions)：跨 I/O 边界传递 context，事务回调只使用传入的 `*sql.Tx`，检查提交和回滚边界。SQLite 外键按连接启用，WAL 不消除写竞争；参见 [SQLite 外键](https://www.sqlite.org/foreignkeys.html)和 [WAL](https://www.sqlite.org/wal.html)。与本项目合同或更严格约束不一致的示例不得直接套用。
 - 中文注释、相关测试及根合同一致性纳入完成条件。子代理须交付修改文件、实际命令及结果、未验证事项；主代理在根工作区完成整体验收后，先提交后端，再更新根仓库子模块指针。未经用户授权不推送或部署。
