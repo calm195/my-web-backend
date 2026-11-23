@@ -159,6 +159,17 @@ func TestDeferredForeignKeyRollback(t *testing.T) {
 	if err = s.Read.QueryRowContext(ctx, "SELECT count(*) FROM content_objects").Scan(&n); err != nil || n != 0 {
 		t.Fatalf("残留内容对象 %d %v", n, err)
 	}
+	// 延迟外键在提交时失败；还要验证同一写连接可以重用，不能只凭只读连接看不到数据判断清理完成。
+	if err = s.WithTx(ctx, func(tx *sql.Tx) error {
+		_, e := tx.ExecContext(ctx, "UPDATE site_settings SET title='恢复写入' WHERE id=1")
+		return e
+	}); err != nil {
+		t.Fatalf("提交失败后写连接无法重用：%v", err)
+	}
+	var title string
+	if err = s.Read.QueryRowContext(ctx, "SELECT title FROM site_settings WHERE id=1").Scan(&title); err != nil || title != "恢复写入" {
+		t.Fatalf("提交失败后未恢复写入：%s %v", title, err)
+	}
 }
 
 func TestSchemaCheckHonorsLatestMigrationRecord(t *testing.T) {

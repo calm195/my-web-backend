@@ -114,6 +114,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			s.serviceError(rw, err)
 			return
 		}
+		// 安全方法只读取数据；所有其他管理请求都需同时验证来源和当前会话的 CSRF token。
 		if r.Method != http.MethodGet && r.Method != http.MethodHead && r.Method != http.MethodOptions {
 			if !s.originOK(r) {
 				s.fail(rw, 403, "ORIGIN_REJECTED", "请求来源不受信任。", nil)

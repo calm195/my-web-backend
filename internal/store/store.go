@@ -95,6 +95,9 @@ func (s *Store) WithTx(ctx context.Context, fn func(*sql.Tx) error) error {
 	if err != nil {
 		return err
 	}
+	// 回调内的全部数据库操作必须使用 tx；混用连接池会逃离事务并可能等待自身持有的写连接。
+	// 回调失败时延迟回滚；提交后 database/sql 将事务标记为完成，延迟回滚不再改变数据库。
+	// 当前 modernc 驱动在提交失败时尝试清理仍活动的事务；升级驱动时需重新验证这一边界。
 	defer tx.Rollback()
 	if err = fn(tx); err != nil {
 		return err

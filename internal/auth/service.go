@@ -166,6 +166,7 @@ func (s *Service) Login(ctx context.Context, username, password, oldToken string
 		}
 		if oldToken != "" {
 			oldHash := sha256.Sum256([]byte(oldToken))
+			// 只撤销此浏览器提交的旧会话；旧 token 已失效时删除零行仍可创建新会话。
 			if _, err := tx.ExecContext(ctx, `DELETE FROM sessions WHERE token_hash=?`, oldHash[:]); err != nil {
 				return err
 			}
@@ -238,6 +239,7 @@ func (s *Service) CheckCSRF(token, csrf string) error {
 // Logout 删除指定服务端会话；只有实际删除一行才表示退出成功。
 func (s *Service) Logout(ctx context.Context, token string) error {
 	h := sha256.Sum256([]byte(token))
+	// 按 token 摘要精确撤销当前会话；零行表示会话已被删除，不影响其他浏览器。
 	result, err := s.DB.Write.ExecContext(ctx, `DELETE FROM sessions WHERE token_hash=?`, h[:])
 	if err != nil {
 		return err
