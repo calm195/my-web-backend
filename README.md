@@ -21,9 +21,9 @@ sh scripts/build.sh
 在完整根工作区可使用项目私有工具链，从根目录执行：
 
 ```sh
-sh scripts/dev/with-tools.sh sh backend/scripts/check.sh
-sh scripts/dev/with-tools.sh sh backend/scripts/test.sh
-sh scripts/dev/with-tools.sh sh backend/scripts/build.sh
+./dev exec sh backend/scripts/check.sh
+./dev exec sh backend/scripts/test.sh
+./dev exec sh backend/scripts/build.sh
 ```
 
 ## 本地运行与维护
