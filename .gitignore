@@ -1,0 +1,18 @@
+# 本地运行数据、凭据与证据不进入后端仓库。
+.env
+.env.*
+!.env.example
+/var/
+/data/
+/backups/
+/bin/
+*.sqlite
+*.sqlite3
+*.db
+*.db-wal
+*.db-shm
+*.log
+*.pem
+*.key
+coverage.out
+.DS_Store
